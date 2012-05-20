@@ -9,7 +9,7 @@ Gitweb user and group can be specified ([apache2-mpm-itk](http://mpm-itk.sesse.n
 Attributes
 ==========
 
-See `attributes/default.rb`.
+See `attributes/default.rb` for default values.
 
 Usage
 =====
@@ -17,7 +17,12 @@ Usage
 Example node configuration:
 
     {
-      "gitolite": [{"name": "git", "admin": "user"}],
+      "gitolite": [
+        {
+          "name": "git",
+          "admin": "user"
+        }
+      ],
       "gitweb": {
         "server_name": "git.domain.com",
         "user": "git",
