@@ -10,7 +10,7 @@ Theme [gitweb-theme](https://github.com/kogakure/gitweb-theme) applied by defaul
 
 Also, "git clone" over HTTP enabled, this will work:
 
-  git clone http://git.domain.com/repository.git
+    git clone http://git.domain.com/repository.git
 
 Attributes
 ==========
