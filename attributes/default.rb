@@ -1,4 +1,4 @@
-default.gitweb[:user] = "git"
+default.gitweb[:owner] = "git"
 default.gitweb[:group] = "www-data"
 default.gitweb[:project_root] = "/home/git/repositories"
 default.gitweb[:config] = "/etc/gitweb.conf"

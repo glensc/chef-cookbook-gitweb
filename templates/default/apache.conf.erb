@@ -3,9 +3,9 @@
   ServerAlias <% @params[:server_aliases].each do |a| %><%= "#{a}" %> <% end %>
   DocumentRoot <%= @params[:docroot] %>
 
-  <% if @params[:gitweb_user] and @params[:gitweb_group] %>
+  <% if @params[:gitweb_owner] and @params[:gitweb_group] %>
     <IfModule mpm_itk_module>
-      AssignUserId <%= @params[:gitweb_user] %> <%= @params[:gitweb_group] %>
+      AssignUserId <%= @params[:gitweb_owner] %> <%= @params[:gitweb_group] %>
     </IfModule>
   <% end %>
 

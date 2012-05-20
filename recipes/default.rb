@@ -5,7 +5,7 @@ include_recipe "apache2::mod_rewrite"
 include_recipe "apache2::mod_deflate"
 
 # Apache "mpm-itk"
-if node['gitweb']['user'] and node['gitweb']['group']
+if node['gitweb']['owner'] and node['gitweb']['group']
   package "apache2-mpm-itk" do
     action :install
   end
@@ -40,7 +40,7 @@ web_app "gitweb" do
   server_aliases gitweb_server_aliases
   docroot node[:gitweb][:document_root]
   # Gitweb settings
-  gitweb_user node[:gitweb][:user]
+  gitweb_owner node[:gitweb][:owner]
   gitweb_group node[:gitweb][:group]
   gitweb_config node[:gitweb][:config]
   gitweb_project_root node[:gitweb][:project_root]
