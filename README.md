@@ -6,6 +6,8 @@ Easily can be used with [chef-gitolite](https://github.com/rocketlabsdev/chef-gi
 
 Gitweb user and group can be specified ([apache2-mpm-itk](http://mpm-itk.sesse.net) used).
 
+Also, theme [gitweb-theme](https://github.com/kogakure/gitweb-theme) applied by default.
+
 Attributes
 ==========
 
