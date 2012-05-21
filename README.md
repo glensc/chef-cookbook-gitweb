@@ -20,7 +20,7 @@ See `attributes/default.rb` for default values.
 Usage
 =====
 
-Example node configuration:
+Node configuration example:
 
     {
       "gitolite": [
