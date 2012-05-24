@@ -1,42 +1,49 @@
 <VirtualHost *:<%= @params[:server_port] %>>
-  ServerName <%= @params[:server_name] %>
-  ServerAlias <% @params[:server_aliases].each do |a| %><%= "#{a}" %> <% end %>
-  DocumentRoot <%= @params[:docroot] %>
+    ServerName <%= @params[:server_name] %>
+    ServerAlias <% @params[:server_aliases].each do |a| %><%= "#{a}" %> <% end %>
+    DocumentRoot <%= @params[:docroot] %>
 
-  <% if @params[:gitweb_owner] and @params[:gitweb_group] %>
+    <% if @params[:gitweb][:owner] and @params[:gitweb][:group] %>
     <IfModule mpm_itk_module>
-      AssignUserId <%= @params[:gitweb_owner] %> <%= @params[:gitweb_group] %>
+        AssignUserId <%= @params[:gitweb][:owner] %> <%= @params[:gitweb][:group] %>
     </IfModule>
-  <% end %>
+    <% end %>
 
-  # Gitweb directory
-  <Directory <%= @params[:docroot] %>>
-    Options FollowSymLinks +ExecCGI
-    AddHandler cgi-script .cgi
-    # Pretty gitweb URLs
-    RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^.* /index.cgi/$0 [L,PT]
-  </Directory>
+    # Gitweb directory
+    <Directory <%= @params[:docroot] %>>
+        Options FollowSymLinks +ExecCGI
+        AddHandler cgi-script .cgi
+        # Pretty gitweb URLs
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule ^.* /index.cgi/$0 [L,PT]
+        <% if @params[:htpasswd] %>
+        # Password protection
+        AuthType Basic
+        AuthName "Restricted"
+        AuthUserFile <%= @params[:htpasswd] %>
+        Require valid-user
+        <% end %>
+    </Directory>
 
-  # Enable "git clone" over HTTP
-  SetEnv GIT_HTTP_EXPORT_ALL
-  SetEnv GITWEB_CONFIG <%= @params[:gitweb_config] %>
-  SetEnv GIT_PROJECT_ROOT <%= @params[:gitweb_project_root] %>
-  ScriptAliasMatch "(?x)^/(.*/(HEAD | \
-                    info/refs | \
-                    objects/(info/[^/]+ | \
-                    [0-9a-f]{2}/[0-9a-f]{38} | \
-                    pack/pack-[0-9a-f]{40}\.(pack|idx)) | \
-                    git-(upload|receive)-pack))$" \
-                    /usr/lib/git-core/git-http-backend/$1
+    # Enable "git clone" over HTTP
+    SetEnv GIT_HTTP_EXPORT_ALL
+    SetEnv GITWEB_CONFIG <%= @params[:gitweb][:config] %>
+    SetEnv GIT_PROJECT_ROOT <%= @params[:gitweb][:project_root] %>
+    ScriptAliasMatch "(?x)^/(.*/(HEAD | \
+                     info/refs | \
+                     objects/(info/[^/]+ | \
+                     [0-9a-f]{2}/[0-9a-f]{38} | \
+                     pack/pack-[0-9a-f]{40}\.(pack|idx)) | \
+                     git-(upload|receive)-pack))$" \
+                     /usr/lib/git-core/git-http-backend/$1
 
-  # Deflate
-  AddOutputFilterByType DEFLATE text/html text/plain text/xml
+    # Deflate
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml
 
-  # Logging
-  LogLevel info
-  ErrorLog <%= node['apache']['log_dir'] %>/<%= @params[:name] %>-error.log
-  CustomLog <%= node['apache']['log_dir'] %>/<%= @params[:name] %>-access.log combined
+    # Logging
+    LogLevel info
+    ErrorLog <%= node['apache']['log_dir'] %>/<%= @params[:name] %>-error.log
+    CustomLog <%= node['apache']['log_dir'] %>/<%= @params[:name] %>-access.log combined
 </VirtualHost>

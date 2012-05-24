@@ -1,0 +1,20 @@
+upstream gitweb_server {
+    server 127.0.0.1:<%= @gitweb[:server_port] %> fail_timeout=0;
+}
+
+server {
+    listen <%= @server_port %>;
+    server_name <%= @gitweb[:server_name] %>;
+    access_log <%= @node[:nginx][:log_dir] %>/<%= @gitweb[:server_name].downcase %>.access.log;
+
+    root <%= @gitweb[:document_root] %>;
+
+    location @gitweb_server {
+        proxy_set_header Host $http_host;
+        proxy_pass http://gitweb_server;
+    }
+
+    location / {
+        try_files $uri @gitweb_server;
+    }
+}
