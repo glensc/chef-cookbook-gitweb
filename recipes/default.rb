@@ -80,6 +80,8 @@ if node[:gitweb][:nginx_proxy]
       mode   "0644"
       variables(
         :server_port => node[:gitweb][:nginx_port],
+        :server_name => node[:gitweb][:server_name],
+        :root => node[:gitweb][:document_root],
         :gitweb => node[:gitweb]
       )
       notifies :restart, resources(:service => "nginx")
