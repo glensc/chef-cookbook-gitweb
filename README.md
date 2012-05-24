@@ -72,5 +72,5 @@ Users data bag example (compatible with with Chef [users cookbook](https://githu
     knife data bag users user2
     {
       "id": "user2",
-      "password": "user1_password"
+      "password": "user2_password"
     }
