@@ -2,7 +2,7 @@ Description
 ===========
 
 [Gitweb](https://git.wiki.kernel.org/index.php/Gitweb) installation and configuration.
-Easily can be used with [chef-gitolite](https://github.com/nickola/chef-gitolite).
+Easily can be used with [chef-gitolite](https://github.com/nickola/chef-gitolite) cookbook.
 
 Features:
 
@@ -16,7 +16,7 @@ Features:
 
  - "git clone" over HTTP enabled, this will work:
 
-    git clone http://git.domain.com/repository.git
+        git clone http://git.domain.com/repository.git
 
 Attributes
 ==========
