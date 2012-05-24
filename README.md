@@ -31,7 +31,7 @@ Node configuration example:
     {
       "gitolite": {
         "git": {"admin": "user1"}
-      }
+      },
       "gitweb": {
         "server_name": "git.domain.com"
       },
@@ -47,7 +47,7 @@ Node configuration example with user/password protection and nginx as proxy:
       "apache": {"listen_ports": ["8080"]},
       "gitolite": {
         "git": {"admin": "user1"}
-      }
+      },
       "gitweb": {
         "nginx_proxy": true,
         "server_port": "8080",
