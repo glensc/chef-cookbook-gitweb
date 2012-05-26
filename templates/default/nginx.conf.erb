@@ -3,11 +3,17 @@ upstream gitweb_server {
 }
 
 server {
-    listen <%= @server_port %>;
+    listen <% if @server_host %><%= @server_host %>:<% end %><%= @server_port %>;
     server_name <%= @server_name %>;
     access_log <%= @node[:nginx][:log_dir] %>/<%= @server_name.downcase %>.access.log;
 
     root <%= @root %>;
+    <% if @ssl_certificate %>
+    # SSL
+    ssl on;
+    ssl_certificate <%= @ssl_certificate %>;
+    ssl_certificate_key <%= @ssl_certificate %>;
+    <% end %>
 
     location @gitweb_server {
         proxy_set_header Host $http_host;

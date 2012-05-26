@@ -12,11 +12,16 @@ Features:
 
  - User/password protection supported.
 
- - [Nginx](http://www.nginx.org) as proxy supported.
+ - [Nginx](http://www.nginx.org) as proxy supported (optionally with HTTPS).
 
  - "git clone" over HTTP enabled, this will work:
 
         git clone http://git.domain.com/repository.git
+
+        or with user/password protection
+
+        git clone http://user@password:git.domain.com/repository.git
+
 
 Attributes
 ==========
@@ -49,9 +54,30 @@ Node configuration example with user/password protection and nginx as proxy:
         "git": {"admin": "user1"}
       },
       "gitweb": {
-        "nginx_proxy": true,
         "server_port": "8080",
         "server_name": "git.domain.com",
+        "nginx_proxy": true,
+        "users": ["user1", "user2"]
+      },
+      "run_list": [
+        "recipe[gitolite]",
+        "recipe[gitweb]"
+      ]
+    }
+
+Node configuration example with user/password protection, nginx as proxy and HTTPS:
+
+    {
+      "apache": {"listen_ports": ["8080"]},
+      "gitolite": {
+        "git": {"admin": "user1"}
+      },
+      "gitweb": {
+        "server_port": "8080",
+        "server_name": "git.domain.com",
+        "nginx_proxy": true,
+        "nginx_port": 443,
+        "nginx_ssl": "self-signed",
         "users": ["user1", "user2"]
       },
       "run_list": [

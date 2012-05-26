@@ -13,7 +13,12 @@ default[:gitweb][:document_root] = "/usr/share/gitweb"
 
 # Nginx settings
 default[:gitweb][:nginx_proxy] = false
+default[:gitweb][:nginx_host] = nil
 default[:gitweb][:nginx_port] = 80
+default[:gitweb][:nginx_ssl] = false
+default[:gitweb][:nginx_ssl_days] = 365 * 5
+default[:gitweb][:nginx_ssl_key_type] = "rsa"
+default[:gitweb][:nginx_ssl_key_size] = 2048
 
 # Theme settings
 default[:gitweb][:theme] = "https://github.com/kogakure/gitweb-theme.git"
