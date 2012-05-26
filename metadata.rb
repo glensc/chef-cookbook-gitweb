@@ -5,6 +5,10 @@ description       "Gitweb installation and configuration"
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version           "1.0"
 
+%w{gitweb apache2}.each do |cb|
+  depends cb
+end
+
 %w{debian ubuntu}.each do |os|
   supports os
 end
