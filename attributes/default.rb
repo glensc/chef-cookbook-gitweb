@@ -19,6 +19,7 @@ default[:gitweb][:nginx_ssl] = false
 default[:gitweb][:nginx_ssl_days] = 365 * 5
 default[:gitweb][:nginx_ssl_key_type] = "rsa"
 default[:gitweb][:nginx_ssl_key_size] = 2048
+default[:gitweb][:nginx_http_to_https] = true
 
 # Theme settings
 default[:gitweb][:theme] = "https://github.com/kogakure/gitweb-theme.git"

@@ -3,6 +3,9 @@ upstream gitweb_server {
 }
 
 server {
+    charset utf8;
+    server_tokens off;
+
     listen <% if @server_host %><%= @server_host %>:<% end %><%= @server_port %>;
     server_name <%= @server_name %>;
     access_log <%= @node[:nginx][:log_dir] %>/<%= @server_name.downcase %>.access.log;
@@ -24,3 +27,15 @@ server {
         try_files $uri @gitweb_server;
     }
 }
+
+<% if @ssl_certificate and @http_to_https %>
+server {
+    charset utf8;
+    server_tokens off;
+
+    server_name <%= @server_name %>;
+    access_log off;
+
+    rewrite ^ https://$server_name$request_uri? permanent;
+}
+<% end %>

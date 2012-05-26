@@ -12,7 +12,11 @@ Features:
 
  - User/password protection supported.
 
- - [Nginx](http://www.nginx.org) as proxy supported (optionally with HTTPS, self-signed certificate can be generated automatically).
+ - [Nginx](http://www.nginx.org) as proxy supported.
+
+ - [Nginx](http://www.nginx.org) HTTPS (SSL) configuration supported (self-signed certificate can be generated automatically).
+
+ - [Nginx](http://www.nginx.org) automatically HTTP to HTTPS redirect configuration supported.
 
  - "git clone" over HTTP enabled, this will work:
 

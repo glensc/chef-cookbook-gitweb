@@ -115,6 +115,7 @@ if node[:gitweb][:nginx_proxy]
       :server_port => node[:gitweb][:nginx_port],
       :server_name => node[:gitweb][:server_name],
       :ssl_certificate => ssl_certificate,
+      :http_to_https => node[:gitweb][:nginx_http_to_https],
       :root => node[:gitweb][:document_root],
       :gitweb => node[:gitweb]
     )
