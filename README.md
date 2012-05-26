@@ -12,13 +12,13 @@ Features:
 
  - User/password protection supported.
 
- - [Nginx](http://www.nginx.org) as proxy supported (optionally with HTTPS).
+ - [Nginx](http://www.nginx.org) as proxy supported (optionally with HTTPS, self-signed certificate can be generated automatically).
 
  - "git clone" over HTTP enabled, this will work:
 
         git clone http://git.domain.com/repository.git
 
-        or with user/password protection
+        or with user/password protection:
 
         git clone http://user@password:git.domain.com/repository.git
 
