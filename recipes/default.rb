@@ -101,7 +101,7 @@ if node[:gitweb][:nginx_proxy]
       umask "0127"
       command "openssl req -x509 -nodes -days #{node[:gitweb][:nginx_ssl_days]} -newkey #{node[:gitweb][:nginx_ssl_key_type]}:#{node[:gitweb][:nginx_ssl_key_size]} -subj '/CN=#{node[:gitweb][:server_name]}' -keyout #{ssl_certificate} -out #{ssl_certificate}"
       notifies :restart, resources(:service => "nginx")
-      not_if { ::File.exists?(ssl_certificate) }
+      creates ssl_certificate
     end
   end
 
