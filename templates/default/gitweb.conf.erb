@@ -2,7 +2,7 @@
 $projectroot = "<%= @gitweb[:project_root] %>";
 
 # base url list
-@git_base_url_list = ("http://<%= @gitweb[:server_name] %>"<% @gitweb[:base_url_list].each do |a| %>, "<%= "#{a.gsub(/@/, '\\@')}" %>"<% end %>);
+@git_base_url_list = (<% @gitweb[:base_url_list].each do |a| %>"<%= "#{a.gsub(/@/, '\\@')}" %>", <% end %>);
 
 # directory to use for temp files
 $git_temp = "/tmp";
