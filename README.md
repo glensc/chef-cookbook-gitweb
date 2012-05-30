@@ -26,7 +26,6 @@ Features:
 
         git clone http://user@password:git.domain.com/repository.git
 
-
 Attributes
 ==========
 
