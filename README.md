@@ -89,7 +89,7 @@ Node configuration example with user/password protection, nginx as proxy and HTT
       ]
     }
 
-Users data bag example (compatible with with Chef [users cookbook](https://github.com/opscode-cookbooks/users)):
+Users data bag example (compatible with Chef [users cookbook](https://github.com/opscode-cookbooks/users)):
 
     knife data bag users user1
     {
