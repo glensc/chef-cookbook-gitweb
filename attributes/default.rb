@@ -23,3 +23,6 @@ default[:gitweb][:nginx_http_to_https] = true
 
 # Theme settings
 default[:gitweb][:theme] = "https://github.com/kogakure/gitweb-theme.git"
+
+# Apache
+default[:apache][:default_site_enabled] = false
