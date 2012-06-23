@@ -66,6 +66,12 @@ web_app "gitweb" do
   notifies :reload, resources(:service => "apache2")
 end
 
+# Disabling Apache default site
+apache_site "default" do
+  enable false
+  not_if { node['apache']['default_site_enabled'] }
+end
+
 # Gitweb theme
 if node[:gitweb][:theme]
   git "/usr/share/gitweb/theme" do
