@@ -39,6 +39,17 @@
                      git-(upload|receive)-pack))$" \
                      /usr/lib/git-core/git-http-backend/$1
 
+    <Directory /usr/lib/git-core>
+        Options FollowSymLinks +ExecCGI
+        <% if @params[:htpasswd] %>
+        # Password protection
+        AuthType Basic
+        AuthName "Restricted"
+        AuthUserFile <%= @params[:htpasswd] %>
+        Require valid-user
+        <% end %>
+    </Directory>
+
     # Deflate
     AddOutputFilterByType DEFLATE text/html text/plain text/xml
 

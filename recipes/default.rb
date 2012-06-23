@@ -36,11 +36,12 @@ if node[:gitweb][:users]
   end
 
   node[:gitweb][:users].each do |user_name|
-    htpasswd gitweb_htpasswd do
-      user user_name
-      password data_bag_item('users', user_name)['password']
-      notifies :reload, resources(:service => "apache2")
-      only_if { not ::File.exists?(gitweb_htpasswd) or File.read(gitweb_htpasswd).grep(/^#{Regexp.escape(user_name)}/).empty? }
+    if !::File.exists?(gitweb_htpasswd) || File.read(gitweb_htpasswd).grep(/^#{Regexp.escape(user_name)}/).empty?
+      htpasswd gitweb_htpasswd do
+        user user_name
+        password data_bag_item('users', user_name)['password']
+        notifies :reload, resources(:service => "apache2")
+      end
     end
   end
 end
