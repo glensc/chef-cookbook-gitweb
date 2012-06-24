@@ -6,25 +6,23 @@ Easily can be used with [chef-gitolite](https://github.com/nickola/chef-gitolite
 
 Features:
 
- - Gitweb owner and group can be specified ([apache2-mpm-itk](http://mpm-itk.sesse.net) used).
-
- - Theme [gitweb-theme](https://github.com/kogakure/gitweb-theme) applied by default.
-
- - User/password protection supported.
-
- - [Nginx](http://www.nginx.org) as proxy supported.
+ - [Nginx](http://www.nginx.org) as web server.
 
  - [Nginx](http://www.nginx.org) HTTPS (SSL) configuration supported (self-signed certificate can be generated automatically).
 
  - [Nginx](http://www.nginx.org) automatically HTTP to HTTPS redirect configuration supported.
 
- - "git clone" over HTTP enabled, this will work:
+ - Theme [gitweb-theme](https://github.com/kogakure/gitweb-theme) applied by default.
 
-        git clone http://git.domain.com/repository.git
+ - User/password protection supported.
+
+ - "git clone" over HTTP/HTTPS enabled, this will work:
+
+        git clone https://git.domain.com/repository.git
 
         or with user/password protection:
 
-        git clone http://user@password:git.domain.com/repository.git
+        git clone https://user@password:git.domain.com/repository.git
 
 Attributes
 ==========
@@ -49,17 +47,14 @@ Node configuration example:
       ]
     }
 
-Node configuration example with user/password protection and nginx as proxy:
+Node configuration example with user/password protection:
 
     {
-      "apache": {"listen_ports": ["8080"]},
       "gitolite": {
         "git": {"admin": "user1"}
       },
       "gitweb": {
-        "server_port": "8080",
         "server_name": "git.domain.com",
-        "nginx_proxy": true,
         "users": ["user1", "user2"]
       },
       "run_list": [
@@ -68,19 +63,17 @@ Node configuration example with user/password protection and nginx as proxy:
       ]
     }
 
-Node configuration example with user/password protection, nginx as proxy and HTTPS:
+Node configuration example with user/password protection and HTTPS (SSL):
 
     {
-      "apache": {"listen_ports": ["8080"]},
       "gitolite": {
         "git": {"admin": "user1"}
       },
       "gitweb": {
-        "server_port": "8080",
+        "ssl": "self-signed",
+        "server_port": 443,
         "server_name": "git.domain.com",
-        "nginx_proxy": true,
-        "nginx_port": 443,
-        "nginx_ssl": "self-signed",
+        "server_http_to_https": true,
         "users": ["user1", "user2"]
       },
       "run_list": [

@@ -1,7 +1,3 @@
-upstream gitweb_server {
-    server 127.0.0.1:<%= @gitweb[:server_port] %> fail_timeout=0;
-}
-
 server {
     charset utf8;
     server_tokens off;
@@ -10,25 +6,55 @@ server {
     server_name <%= @server_name %>;
     access_log <%= @node[:nginx][:log_dir] %>/<%= @server_name.downcase %>.access.log;
 
-    root <%= @root %>;
-    <% if @ssl_certificate %>
+    root <%= @server_root %>;
+    <% if @ssl %>
+
     # SSL
     ssl on;
-    ssl_certificate <%= @ssl_certificate %>;
-    ssl_certificate_key <%= @ssl_certificate %>;
+    ssl_certificate <%= @ssl %>;
+    ssl_certificate_key <%= @ssl %>;
+    <% end %>
+    <% if @htpasswd %>
+
+    # Password protection
+    auth_basic "Restricted";
+    auth_basic_user_file <%= @htpasswd %>;
     <% end %>
 
-    location @gitweb_server {
-        proxy_set_header Host $host;
-        proxy_pass http://gitweb_server;
+    index index.cgi;
+    location /index.cgi {
+        # Disable gzip (it makes scripts feel slower since they have to complete before getting gzipped)
+        gzip off;
+
+        # FastCGI
+        include fastcgi_params;
+        fastcgi_param SCRIPT_NAME $uri;
+        fastcgi_param GITWEB_CONFIG <%= @gitweb[:config] %>;
+        fastcgi_pass unix:/var/run/fcgiwrap.socket;
     }
 
-    location / {
-        try_files $uri @gitweb_server;
+    # Clone over HTTP (static files)
+    location ~ ^.*\.git/objects/([0-9a-f]+/[0-9a-f]+|pack/pack-[0-9a-f]+\.(pack|idx))$ {
+        root <%= @gitweb[:project_root] %>;
+    }
+
+    # Clone over HTTP (requests to git-http-backend)
+    location ~ ^.*\.git/(HEAD|info/refs|objects/info/.*|git-(upload|receive)-pack)$ {
+        # Disable gzip (it makes scripts feel slower since they have to complete before getting gzipped)
+        gzip off;
+
+        root /usr/lib/git-core;
+        rewrite ^/(.*)$ /git-http-backend/$1 break;
+        # FastCGI
+        include fastcgi_params;
+        fastcgi_param SCRIPT_NAME /git-http-backend;
+        fastcgi_param GIT_PROJECT_ROOT <%= @gitweb[:project_root] %>;
+        fastcgi_param GIT_HTTP_EXPORT_ALL "";
+        fastcgi_pass unix:/var/run/fcgiwrap.socket;
     }
 }
 
-<% if @ssl_certificate and @http_to_https %>
+<% if @ssl && @http_to_https %>
 server {
     charset utf8;
     server_tokens off;
