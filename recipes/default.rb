@@ -72,9 +72,9 @@ end
 
 template "/etc/nginx/sites-available/gitweb" do
   source "nginx.conf.erb"
-  owner  "root"
-  group  "root"
-  mode   "0644"
+  owner "root"
+  group "root"
+  mode "0644"
   variables(
     :server_host => node[:gitweb][:server_host],
     :server_port => node[:gitweb][:server_port],
