@@ -93,6 +93,7 @@ template "/etc/nginx/sites-available/gitweb" do
     :server_port => node[:gitweb][:nginx_port],
     :server_name => node[:gitweb][:server_name],
     :server_root => node[:gitweb][:server_root],
+    :default_server => node[:gitweb][:nginx_default_server],
     :http_to_https => node[:gitweb][:nginx_http_to_https],
     :htpasswd => htpasswd_file,
     :ssl => ssl_file,

@@ -2,7 +2,7 @@ server {
     charset utf8;
     server_tokens off;
 
-    listen <% if @server_host %><%= @server_host %>:<% end %><%= @server_port %>;
+    listen <% if @server_host %><%= @server_host %>:<% end %><%= @server_port %><% if @default_server %> default<% end %>;
     server_name <%= Array(@server_name).join(' ') %>;
     access_log <%= @node[:nginx][:log_dir] %>/<%= Array(@server_name)[0].downcase %>.access.log;
 

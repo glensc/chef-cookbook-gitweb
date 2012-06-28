@@ -10,7 +10,8 @@ default[:gitweb][:server_root] = "/usr/share/gitweb"
 # Nginx settings
 default[:gitweb][:nginx_host] = nil
 default[:gitweb][:nginx_port] = 80
-default[:gitweb][:nginx_http_to_https] = false
+default[:gitweb][:nginx_http_to_https] = true
+default[:gitweb][:nginx_default_server] = false
 default[:gitweb][:nginx_ssl] = false
 default[:gitweb][:nginx_ssl_days] = 365 * 5
 default[:gitweb][:nginx_ssl_key_type] = "rsa"

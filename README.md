@@ -72,7 +72,6 @@ Node configuration example with user/password protection and HTTPS (SSL):
       "gitweb": {
         "nginx_port": 443,
         "nginx_ssl": "self-signed",
-        "nginx_http_to_https": true,
         "server_name": "git.domain.com",
         "users": ["user1", "user2"]
       },
