@@ -3,8 +3,8 @@ server {
     server_tokens off;
 
     listen <% if @server_host %><%= @server_host %>:<% end %><%= @server_port %>;
-    server_name <%= @server_name %>;
-    access_log <%= @node[:nginx][:log_dir] %>/<%= @server_name.downcase %>.access.log;
+    server_name <%= Array(@server_name).join(' ') %>;
+    access_log <%= @node[:nginx][:log_dir] %>/<%= Array(@server_name)[0].downcase %>.access.log;
 
     root <%= @server_root %>;
     <% if @ssl %>
@@ -55,13 +55,15 @@ server {
 }
 
 <% if @ssl && @http_to_https %>
+<% Array(@server_name).each do |server_name| %>
 server {
     charset utf8;
     server_tokens off;
 
-    server_name <%= @server_name %>;
+    server_name <%= server_name %>;
     access_log off;
 
     rewrite ^ https://$server_name$request_uri? permanent;
 }
+<% end %>
 <% end %>

@@ -1,0 +1,11 @@
+[req]
+distinguished_name = req_distinguished_name
+x509_extensions    = v3_req
+
+[req_distinguished_name]
+commonName = Common Name
+
+[v3_req]
+basicConstraints = CA:false
+keyUsage = digitalSignature, keyEncipherment
+subjectAltName = DNS:<%= Array(@server_name).join(', DNS:') %>

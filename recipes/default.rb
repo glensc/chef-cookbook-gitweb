@@ -1,3 +1,4 @@
+require_recipe "git"
 include_recipe "nginx"
 
 # Packages
@@ -50,23 +51,35 @@ end
 
 # Nginx
 ssl_file = nil
-if node[:gitweb][:ssl] && node[:gitweb][:ssl] == "self-signed"
+if node[:gitweb][:nginx_ssl] && node[:gitweb][:nginx_ssl] == "self-signed"
   ssl_file = "#{node[:gitweb][:config_directory]}/ssl.pem"
 
-  directory node[:gitweb][:config_directory] do
-    owner "root"
-    group "root"
-    mode "0755"
-    action :create
-  end
+  if !::File.exists?(ssl_file)
+    openssl_config = "#{Chef::Config[:file_cache_path]}/openssl_config.conf"
 
-  execute "make self-signed SSL certificate" do
-    user "root"
-    group node[:gitweb][:group]
-    umask "0127"
-    command "openssl req -x509 -nodes -days #{node[:gitweb][:ssl_days]} -newkey #{node[:gitweb][:ssl_key_type]}:#{node[:gitweb][:ssl_key_size]} -subj '/CN=#{node[:gitweb][:server_name]}' -keyout #{ssl_file} -out #{ssl_file}"
-    notifies :restart, resources(:service => "nginx")
-    creates ssl_file
+    template openssl_config do
+      source "openssl.conf.erb"
+      owner  "root"
+      group  "root"
+      mode   "0644"
+      variables(:server_name => node[:gitweb][:server_name])
+    end
+
+    directory node[:gitweb][:config_directory] do
+      owner "root"
+      group "root"
+      mode "0755"
+      action :create
+    end
+
+    execute "make self-signed SSL certificate" do
+      user "root"
+      group node[:gitweb][:group]
+      umask "0127"
+      command "openssl req -x509 -nodes -days #{node[:gitweb][:nginx_ssl_days]} -newkey #{node[:gitweb][:nginx_ssl_key_type]}:#{node[:gitweb][:nginx_ssl_key_size]} -subj '/CN=#{Array(node[:gitweb][:server_name])[0]}' -config #{openssl_config} -keyout #{ssl_file} -out #{ssl_file}"
+      notifies :restart, resources(:service => "nginx")
+      creates ssl_file
+    end
   end
 end
 
@@ -76,11 +89,11 @@ template "/etc/nginx/sites-available/gitweb" do
   group "root"
   mode "0644"
   variables(
-    :server_host => node[:gitweb][:server_host],
-    :server_port => node[:gitweb][:server_port],
+    :server_host => node[:gitweb][:nginx_host],
+    :server_port => node[:gitweb][:nginx_port],
     :server_name => node[:gitweb][:server_name],
     :server_root => node[:gitweb][:server_root],
-    :http_to_https => node[:gitweb][:server_http_to_https],
+    :http_to_https => node[:gitweb][:nginx_http_to_https],
     :htpasswd => htpasswd_file,
     :ssl => ssl_file,
     :gitweb => node[:gitweb]
